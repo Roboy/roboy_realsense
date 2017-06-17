@@ -5,6 +5,7 @@ RoboyRealsense::RoboyRealsense() {
 
     aruco_pose_pub = nh->advertise<roboy_communication_middleware::ArucoPose>("/roboy/middleware/ArucoPose", 1);
     visualization_pub = nh->advertise<visualization_msgs::Marker>("/visualization_marker", 1);
+    video_pub = nh->advertise<sensor_msgs::Image>("/roboy/middleware/realsense", 1);
 
     realsense_ctx = boost::shared_ptr<rs::context>(new rs::context);
     ROS_INFO("There are %d connected RealSense devices.\n", realsense_ctx->get_device_count());
@@ -110,6 +111,12 @@ void RoboyRealsense::arucoDetection() {
                 pose.position.z = tvecs[i][2];
                 msg.pose.push_back(pose);
 
+                cv::Point2f center = (corners[i][0] + corners[i][1] + corners[i][2] + corners[i][3])/4.0f;
+                geometry_msgs::Point c;
+                c.x = center.x;
+                c.y = center.y;
+                msg.center.push_back(c);
+
                 visualization_msgs::Marker msg;
                 msg.header.frame_id = "world";
                 msg.ns = "aruco_marker";
@@ -132,8 +139,16 @@ void RoboyRealsense::arucoDetection() {
             aruco_pose_pub.publish(msg);
         }
 
-        imshow("imageCopy", imageCopy);
-        waitKey(1);
+        cv_bridge::CvImage cvImage;
+        imageCopy.copyTo(cvImage.image);
+        sensor_msgs::Image msg;
+        cvImage.toImageMsg(msg);
+        msg.encoding = "bgr8";
+        msg.header = std_msgs::Header();
+        video_pub.publish(msg);
+
+//        imshow("imageCopy", imageCopy);
+//        waitKey(1);
         ROS_INFO_THROTTLE(5, "aruco ids visible: %d", (int)ids.size());
     }
 }

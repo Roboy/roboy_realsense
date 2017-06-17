@@ -10,7 +10,7 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
 #==============================================================================
 
 # ros
-find_package(catkin REQUIRED COMPONENTS roboy_communication_middleware roscpp std_msgs aruco_detect controller_manager common_utilities)
+find_package(catkin REQUIRED COMPONENTS roboy_communication_middleware roscpp std_msgs aruco_detect cv_bridge controller_manager common_utilities)
 catkin_package( CATKIN_DEPENDS message_runtime roboy_communication_middleware common_utilities INCLUDE_DIRS include)
 include_directories(${catkin_INCLUDE_DIRS} )
 

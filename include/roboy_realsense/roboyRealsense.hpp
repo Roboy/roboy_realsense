@@ -8,7 +8,12 @@
 #include <librealsense/rs.hpp>
 #include <roboy_communication_middleware/ArucoPose.h>
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/Point.h>
 #include <visualization_msgs/Marker.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/Image.h>
 
 using namespace std;
 using namespace cv;
@@ -31,7 +36,7 @@ private:
     string joint_name;
     ros::NodeHandle n;
     ros::Subscriber steer_sub;
-    ros::Publisher aruco_pose_pub, visualization_pub;
+    ros::Publisher aruco_pose_pub, visualization_pub, video_pub;
     boost::shared_ptr<rs::context> realsense_ctx;
     rs::device * realsense_dev;
     rs::intrinsics color_intrin;

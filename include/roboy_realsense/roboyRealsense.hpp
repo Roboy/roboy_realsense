@@ -44,6 +44,6 @@ private:
     Ptr<aruco::DetectorParameters> detectorParams;
     Ptr<aruco::Dictionary> dictionary;
     vector<int> arucoIDs;
-    float markerLength = 0.053f;
+    float markerLength = 0.062f;
     float K[9];
 };

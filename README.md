@@ -15,3 +15,5 @@ sudo apt install ros-kinetic-librealsense
 sudo apt install ros-kinectic-aruco-detect
 
 ```
+### marker ids
+use [this](http://terpconnect.umd.edu/~jwelsh12/enes100/markergen.html) page for marker id generation. You might have to adjust the marker size in the header.

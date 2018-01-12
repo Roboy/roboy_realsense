@@ -14,9 +14,11 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/Image.h>
+#include <Eigen/Dense>
 
 using namespace std;
 using namespace cv;
+using namespace Eigen;
 
 class RoboyRealsense{
 public:

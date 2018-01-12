@@ -16,6 +16,11 @@ include_directories(${catkin_INCLUDE_DIRS} )
 
 find_package(librealsense REQUIRED)
 
+# Eigen
+find_package(PkgConfig REQUIRED )
+pkg_check_modules(EIGEN3 REQUIRED eigen3)
+include_directories(${EIGEN3_INCLUDE_DIRS})
+
 INCLUDE_DIRECTORIES(
         include/
     )

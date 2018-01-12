@@ -17,7 +17,7 @@ RoboyRealsense::RoboyRealsense() {
         ROS_INFO("\nUsing device 0, an %s\n     Serial number: %s\n     Firmware version: %s\n",
                  realsense_dev->get_name(), realsense_dev->get_serial(), realsense_dev->get_firmware_version());
 
-        // Configure all streams to run at VGA resolution at 60 frames per second
+        // Configure all streams to run at VGA resolution at 30 frames per second
         realsense_dev->enable_stream(rs::stream::color, 1920, 1080, rs::format::rgb8, 30);
 
         color_intrin = realsense_dev->get_stream_intrinsics(rs::stream::color);
@@ -102,10 +102,12 @@ void RoboyRealsense::arucoDetection() {
                                 markerLength * 0.5f);
                 geometry_msgs::Pose pose;
                 double theta = sqrt(pow(rvecs[i][0],2.0) + pow(rvecs[i][1],2.0) + pow(rvecs[i][2],2.0));
-                pose.orientation.x = rvecs[i][0]/theta;
-                pose.orientation.y = rvecs[i][1]/theta;
-                pose.orientation.z = rvecs[i][2]/theta;
-                pose.orientation.w = theta;
+                Quaterniond q(rvecs[i][0]/theta,rvecs[i][0]/theta,rvecs[i][0]/theta,theta);
+                q.normalize();
+                pose.orientation.x = q.x();
+                pose.orientation.y = q.y();
+                pose.orientation.z = q.z();
+                pose.orientation.w = q.w();
                 pose.position.x = tvecs[i][0];
                 pose.position.y = tvecs[i][1];
                 pose.position.z = tvecs[i][2];
@@ -120,14 +122,14 @@ void RoboyRealsense::arucoDetection() {
                 visualization_msgs::Marker msg;
                 msg.header.frame_id = "world";
                 msg.ns = "aruco_marker";
-                msg.type = visualization_msgs::Marker::CUBE;
-                msg.color.r = 1.0f;
+                msg.type = visualization_msgs::Marker::SPHERE;
+                msg.color.r = 0;
                 msg.color.g = 1.0f;
-                msg.color.b = 1.0f;
+                msg.color.b = 0;
                 msg.color.a = 1.0f;
-                msg.scale.x = markerLength;
-                msg.scale.y = markerLength;
-                msg.scale.z = markerLength;
+                msg.scale.x = 0.01;
+                msg.scale.y = 0.01;
+                msg.scale.z = 0.01;
                 msg.lifetime = ros::Duration(0.1);
                 msg.header.stamp = ros::Time::now();
                 msg.action = visualization_msgs::Marker::ADD;
